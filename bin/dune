@@ -1,0 +1,9 @@
+(executable
+ (public_name orochi)
+ (name main)
+ (preprocess (pps ppx_deriving.show)) 
+ (libraries orochi))
+
+(env
+  (dev
+    (flags (:standard -w -66-32))))

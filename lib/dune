@@ -1,0 +1,7 @@
+(library
+ (preprocess (pps ppx_deriving.show)) 
+ (name orochi))
+
+(env
+  (dev
+    (flags (:standard -w -66-32))))
