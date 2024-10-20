@@ -1,10 +1,5 @@
+exception Todo
 type syntax_kind = Syntax_kind of int [@@unboxed ] [@@deriving show]
-
-let whitespace = Syntax_kind 0
-let int = Syntax_kind 1
-let plus = Syntax_kind 2
-let star = Syntax_kind 3
-let bin_expr = Syntax_kind 100
 
 module rec Token:
   sig
@@ -25,7 +20,7 @@ and Node:
   sig
     type t = {
       kind: syntax_kind;
-      children: (t, Token.t) Node_or_token.t list;
+      children: ((t, Token.t) Node_or_token.t) list;
       len: int;
     }
     [@@deriving show]
@@ -102,5 +97,8 @@ and Node_or_token: sig
     | Node _ -> None
     | Token b -> Some b
 end
+
+(* TODO : Don't do this*)
+let push x xs = xs @ [x]
 
 type element = (Node.t, Token.t) Node_or_token.t

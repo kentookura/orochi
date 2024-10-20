@@ -1,3 +1,4 @@
+exception Todo
 module Node_or_token = Green.Node_or_token
 module rec Node: sig
     type t = {
@@ -9,6 +10,7 @@ module rec Node: sig
     [@@deriving show]
     val children : t -> Element.t list
     val create : Green.Node.t -> t
+    val kind : t -> Green.syntax_kind
     val text : t -> string
     val parent : t -> t option
     val replace_child : t -> int -> (Green.Node.t, Green.Token.t) Node_or_token.t -> t
@@ -36,6 +38,8 @@ module rec Node: sig
   let text t = Green.Node.text t.green
 
   let parent t = t.parent
+  (* This is probably too clever.*)
+  let ancestors t = Seq.unfold (fun t -> Option.map (fun t -> (t, t)) t.parent) t
 
   let children t =
     let offset_in_parent = ref 0 in
@@ -54,6 +58,10 @@ module rec Node: sig
             offset_in_parent := !offset_in_parent + Green.Token.text_len token;
             Green.Node_or_token.Token ({ parent = Some t; text_offset; green = token }: Token.t)
       )
+
+  let nth_child t = raise Todo
+  let child_containing_range t = raise Todo
+  let child_containing_range t range = raise Todo
 
   let rec replace_child t idx new_child : Node.t =
     let children = children t in
@@ -98,5 +106,3 @@ and Element: sig
 = struct
   type t = (Node.t, Token.t) Node_or_token.t
 end
-
-let smoke () = Format.printf "red smoke test\n\n"
