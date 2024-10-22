@@ -6,7 +6,7 @@ val pp_syntax_kind :
 val show_syntax_kind : syntax_kind -> string
 module rec Token :
   sig
-    type t = { kind : syntax_kind; text : string; }
+    type t
     val pp :
       Format.formatter -> t -> unit
     val show : t -> string
@@ -17,11 +17,7 @@ module rec Token :
   end
 and Node :
   sig
-    type t = {
-      kind : syntax_kind;
-      children : (t, Token.t) Node_or_token.t list;
-      len : int;
-    }
+    type t
     val pp :
       Format.formatter -> t -> unit
     val show : t -> string

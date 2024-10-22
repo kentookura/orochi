@@ -32,4 +32,7 @@ sig
   val text : t -> string
   val parent : t -> Node.t option
 end
-and Element: sig type t = (Node.t, Token.t) Node_or_token.t end
+and Element: sig
+  type t = (Node.t, Token.t) Node_or_token.t
+  val text : t -> string
+end
