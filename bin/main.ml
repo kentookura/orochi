@@ -52,6 +52,15 @@ module Smoke = struct
     let replaced = Red.Node.replace_child paragraph 2 (Token (Token.create ~kind: text "replaced!")) in
     Format.printf "%s\n\n" (Red.Node.show paragraph);
     Format.printf "%s\n\n" (Red.Node.text paragraph);
+    Format.printf "Second child:\n";
+    Format.printf
+      "%s\n\n"
+      (
+        paragraph
+        |> Red.Node.children
+        |> Fun.flip List.nth 2
+        |> Red.Element.text
+      );
     Format.printf "%s\n\n" (Red.Node.text replaced)
 end
 

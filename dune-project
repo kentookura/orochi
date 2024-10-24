@@ -1,5 +1,7 @@
 (lang dune 3.7)
 
+(using menhir 3.0)
+
 (name orochi)
 
 (generate_opam_files true)
@@ -19,7 +21,13 @@
  (name orochi)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml dune ppx_deriving)
+ (depends
+  (menhir
+   (>= 20240715))
+  ocaml
+  dune
+  asai
+  ppx_deriving)
  (tags
   (topics "to describe" your project)))
 
