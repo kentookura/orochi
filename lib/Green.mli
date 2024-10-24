@@ -22,7 +22,7 @@ sig
   val pp :
     Format.formatter -> t -> unit
   val show : t -> string
-  val create : kind: syntax_kind -> Child.t list -> t
+  val create : kind: syntax_kind -> Element.t list -> t
   val kind : t -> syntax_kind
   val text_len : t -> int
   val children : t -> Child.t list

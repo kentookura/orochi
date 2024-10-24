@@ -4,7 +4,7 @@
 
 let (let@) = ( @@ )
 let ( @~ ) = Fun.flip
-exception Todo
+exception Todo of string
 
 type node_data = {
   green: Green.Element.t;
@@ -48,14 +48,15 @@ and Node: sig
     type children = { next: t option } [@@deriving show]
     val children : t -> children
     val text_offset : t -> int
-    val create : Green.Element.t -> t
+    (* val create : Green.Element.t -> t *)
+    val new_root : Green.Node.t -> t
     val kind : t -> Green.syntax_kind
     val text : t -> string
     val parent : t -> t option
     val ancestors : t -> Node.t Seq.t
     val remove_child : t -> int -> t
     val replace_with : t -> Green.Node.t -> Green.Node.t
-    val replace_child : t -> int -> Green.Child.t -> t
+    (* val replace_child : t -> int -> Green.Child.t -> t *)
     (* val next_sibling : t -> t option *)
     (* val prev_sibling : t -> t option *)
   end
@@ -70,6 +71,8 @@ and Node: sig
       index_in_parent = 0;
       offset = 0
     }
+  let new_root : Green.Node.t -> t = fun green ->
+      create (Green.Element.of_node green)
 
   let new_child
       : Green.Node.t ->
@@ -159,11 +162,11 @@ and Node: sig
       )
       siblings
 
-  let nth_child t = raise Todo
-  let child_containing_range t = raise Todo
-  let child_containing_range t range = raise Todo
+  let nth_child t = raise @@ Todo "nth child"
+  let child_containing_range t = raise @@ Todo "child_containing_range"
+  (* let child_containing_range t range = raise @@ Todo "child" *)
 
-  let remove_child t idx = raise Todo
+  let remove_child t idx = raise @@ Todo "remove_child"
 
   let rec replace_with
       : t ->
@@ -185,7 +188,7 @@ and Node: sig
       in
       replace_with parent new_parent
 
-  let replace_child = raise Todo
+  (* let replace_child = raise @@ Todo "replace_child" *)
 
   (* let rec replace_child t idx new_child : Node.t = *)
   (*   let children = children t in *)
@@ -225,7 +228,11 @@ and Token: sig
   let text t = Green.Token.text t.green
   let parent t = t.parent
 
-  let replace_with : t -> Green.Token.t -> Green.Node.t = fun t replacement ->
+  let replace_with
+      : t ->
+      Green.Token.t ->
+      Green.Node.t
+    = fun t replacement ->
       assert (Green.Token.kind t.green = Green.Token.kind replacement);
       let parent = t.parent |> Option.get in
       let me = t.index in

@@ -1,4 +1,4 @@
-exception Todo
+exception Todo of string
 module rec Node_or_token: sig
   type ('a, 'b) t
   val text : (Node.t, Token.t) t -> string
@@ -11,16 +11,11 @@ sig
     Format.formatter -> t -> unit
   val show : t -> string
   val children : t -> children
-  val create : Green.Element.t -> t
+  val new_root : Green.Node.t -> t
   val kind : t -> Green.syntax_kind
   val text : t -> string
   val parent : t -> t option
   val remove_child : t -> int -> t
-  val replace_child :
-    t ->
-    int ->
-    Green.Child.t ->
-    t
 end
 and Token:
 sig

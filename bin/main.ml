@@ -1,5 +1,29 @@
 open Orochi
 
+module Example = struct
+  type syntax_kind =
+    | WHITESPACE
+    | ADD
+    | SUB
+    | MUL
+    | DIV
+    | NUMBER
+    | ERROR
+    | OPERATION
+    | ROOT
+
+  let kind : syntax_kind -> Orochi.syntax_kind = function
+    | WHITESPACE -> Syntax_kind 0
+    | ADD -> Syntax_kind 1
+    | SUB -> Syntax_kind 2
+    | MUL -> Syntax_kind 3
+    | DIV -> Syntax_kind 4
+    | NUMBER -> Syntax_kind 5
+    | ERROR -> Syntax_kind 6
+    | OPERATION -> Syntax_kind 7
+    | ROOT -> Syntax_kind 8
+end
+
 module Smoke = struct
   let run () =
     let open Green in
@@ -48,20 +72,38 @@ module Smoke = struct
           Token rparen;
         ]
     in
-    let paragraph = Red.Node.create paragraph in
-    let replaced = Red.Node.replace_child paragraph 2 (Token (Token.create ~kind: text "replaced!")) in
+    let paragraph = Red.Node.new_root paragraph in
     Format.printf "%s\n\n" (Red.Node.show paragraph);
-    Format.printf "%s\n\n" (Red.Node.text paragraph);
-    Format.printf "Second child:\n";
-    Format.printf
-      "%s\n\n"
-      (
-        paragraph
-        |> Red.Node.children
-        |> Fun.flip List.nth 2
-        |> Red.Element.text
-      );
-    Format.printf "%s\n\n" (Red.Node.text replaced)
+    (* let replaced = *)
+    (* Red.Node.replace_child *)
+    (*   paragraph *)
+    (*   2 *)
+    (*   _ *)
+
+    (* (Token  *)
+    (*   (Token.create ~kind: text "replaced!") *)
+    (* ) *)
+    ()
+  (* Format.printf "%s\n\n" (Red.Node.show paragraph); *)
+  (* Format.printf "%s\n\n" (Red.Node.text paragraph); *)
+  (* Format.printf "Second child:\n"; *)
+  (* Format.printf *)
+  (*   "%s\n\n" *)
+  (*   ( *)
+  (*     paragraph *)
+  (*     |> Red.Node.children *)
+  (*     |> Fun.flip List.nth 2 *)
+  (*     |> Red.Node_or_token.text *)
+  (*   ); *)
+  (* Format.printf *)
+  (*   "%s\n\n" *)
+  (*   ( *)
+  (*     paragraph *)
+  (*     (* |> Red.Node.children *) *)
+  (*     |> Fun.flip Red.Node.remove_child 2 *)
+  (*     |> Red.Element.text *)
+  (*   ); *)
+  (* Format.printf "%s\n\n" (Red.Node.text replaced) *)
 end
 
 let () =

@@ -33,7 +33,7 @@ end
 and Node:
   sig
     type t [@@deriving show]
-    val create : kind: syntax_kind -> Child.t list -> t
+    val create : kind: syntax_kind -> Element.t list -> t
     val kind : t -> syntax_kind
     val text_len : t -> int
     val children : t -> Child.t list
@@ -52,19 +52,21 @@ and Node:
   let text_len t = t.len
   let kind t = t.kind
 
-  let create : kind: syntax_kind -> Child.t list -> t = fun ~kind children ->
-      let len =
-        List.fold_left
+  let create : kind: syntax_kind -> Element.t list -> t = fun ~kind children ->
+      let text_len = ref 0 in
+      let children =
+        List.map
           (
-            fun acc c ->
+            fun c ->
+              let rel_offset = !text_len in
+              text_len := !text_len + Element.text_len c;
               match c with
-              | Child.Node a -> text_len a.node + acc
-              | Child.Token b -> Token.text_len b.token + acc
+              | Element.Node node -> (Child.Node { rel_offset; node })
+              | Element.Token token -> (Child.Token { rel_offset; token })
           )
-          0
           children
       in
-      { kind; children; len }
+      { kind; children; len = !text_len }
 
   let children t = t.children
 
